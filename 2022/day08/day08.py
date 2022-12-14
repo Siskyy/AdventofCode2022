@@ -52,7 +52,7 @@ def main(trees):
             # Check if there is a taller tree on right and left of current tree
             distance = 1
             for position in row:
-                if (tree > row[x_position + 1] )
+                if (tree > row[x_position + 1])
 
 
             check_tree_view(row, trees[1][x_position])
