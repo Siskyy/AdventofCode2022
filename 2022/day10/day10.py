@@ -38,7 +38,7 @@ def main(program):
 
     return signal_strength_total
 
-# PART 2 - Using the sprite
+# PART 2 - Using the sprite --------------------------------------------
 
 # Create a grid which is 40 wide and 6 high
 def blank_grid():
@@ -58,6 +58,7 @@ def display_grid(grid):
         print('\n', end="")
     return
 
+
 def check_if_touching(pixel, sprite):
     # If the sprite is on same spot as current pixel
     if (sprite - 1 <= pixel <= sprite + 1):
@@ -73,81 +74,43 @@ def draw(program):
     pixel = 0
     # Sprite Position will be '###.....................................'
     sprite_pos = 1
-    # Set row_number to 0 (starting row)
-    row_number = 0
-    position = 0
     # For every line in the program
     for instruction in program:
-        # print(display_grid(canvas))
+        # Check if pixel is at the end of a row
+        if (pixel % 40 == 0) and (pixel != 0):
+            # Set pixel to 0 again (but on the next row)
+            pixel = 0
         # If the instruction is a noop value
         if instruction == 'noop':
-            print("NOOP")
-            print(f"Sprite: [{sprite_pos-1},{sprite_pos},{sprite_pos+1}], Pixel: [{pixel}]")
-            print(f"Sprite is touching Pixel") if check_if_touching(pixel, sprite_pos) else print("Sprite is NOT touching Pixel") 
-
             # Check if the sprite is not touching a pixel
             if not check_if_touching(pixel, sprite_pos):
                 # if the sprite is NOT touching the pixel -> change that pixel to a '.'
                 canvas[cycles - 1] = ' '
+            # Complete one cycle and move to next pixel
+            cycles += 1
+            pixel += 1
 
-            # Check if pixel is at the end of a row
-            if (pixel % 40 == 0) and (pixel != 0):
-                row_number += 1
-                # Set pixel to 0 again (but on the next row)
-                pixel = 0
-                # Continue cycles
-                cycles += 1
-            else:
-                # Complete one cycle and move to next pixel
-                cycles += 1
-                pixel += 1
-            print(display_grid(canvas))
         # If the line is an 'addx V', go through 2 cycles before moving the sprite
         else:
-            print(f"ORDER: {instruction}")
-            print(f"Sprite: [{sprite_pos-1},{sprite_pos},{sprite_pos+1}], Pixel: [{pixel}]")
-            print(f"Sprite is touching Pixel") if check_if_touching(pixel, sprite_pos) else print("Sprite is NOT touching Pixel") 
-            
             # First Cycle starts -> sprite stays in same position
             # Check if the sprite is not touching a pixel 
             if not check_if_touching(pixel, sprite_pos):
                 # if the sprite is NOT touching the pixel -> change that pixel to a '.'
                 canvas[cycles - 1] = ' '
             
-            # Check if pixel is at the end of a row
+            # First cycle Complete + move to next pixel/cycle
+            cycles += 1
+            pixel += 1
+            # Need to check again during (this is a 2 cycle process)
             if (pixel % 40 == 0) and (pixel != 0):
-                row_number += 1
                 pixel = 0
-                cycles += 1
-            else:
-                # One cycle Complete + move to next pixel
-                cycles += 1
-                pixel += 1
-
-            print(display_grid(canvas))
-            print(f"Sprite: [{sprite_pos-1},{sprite_pos},{sprite_pos+1}], Pixel: [{pixel}]")
-            print(f"Sprite is touching Pixel") if check_if_touching(pixel, sprite_pos) else print("Sprite is NOT touching Pixel") 
-
             if not check_if_touching(pixel, sprite_pos):
                 canvas[cycles - 1] = ' '
-
-            
-            # Check if pixel is at the end of a row
-            if (pixel % 40 == 0) and (pixel != 0):
-                row_number += 1
-                pixel = 0
-                cycles + 1
-            else:
-                # One cycle Complete + move to next pixel
-                cycles += 1
-                pixel += 1
-
-            print(display_grid(canvas))
-            # Add the value to the register
-            print(f"Sprite moving {instruction[5:]}")
-
+            # Second cycle Complete + move to next pixel/pixel
+            cycles += 1
+            pixel += 1
+            # Move the sprite
             sprite_pos += int(instruction[5:])
-            
     return canvas
 
 
@@ -158,6 +121,5 @@ if __name__ == '__main__':
     #print(main(format(f)))
     ans = draw(format(f))
     # print(ans)
-    # Create blank canvas
     
     display_grid(ans)
