@@ -118,8 +118,6 @@ if __name__ == '__main__':
     with open('test.txt') as inputs:
         f = inputs.read()
 
-    #print(main(format(f)))
+    # PART 2
     ans = draw(format(f))
-    # print(ans)
-    
     display_grid(ans)
