@@ -1,5 +1,6 @@
 
-
+# USing the ASSCI values of each letter:
+    # If the value is only one greater than the previous letter
 
 
 
